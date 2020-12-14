@@ -1,11 +1,14 @@
 lines = *(readlines(joinpath(Base.source_dir(), "input"), keep=true)...)[1:end-1]
 passports = split.(replace.(split(lines, "\n\n"), "\n" => " "), " ")
 
+field_names = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid", "cid"]
+
 # part 1
 valid_count = 0
 for passport in passports
     length(passport) <= 6 && continue
     length(passport) == 7 && any(SubString.(passport, 1, 3) .== "cid") && continue
+    !all(map(x -> x[1:3] in field_names, passport)) && continue
     valid_count += 1
 end
 println(valid_count)
